@@ -7,7 +7,6 @@ var wordDisplay;
 var resetButton;
 var wins;
 var losses;
-var gameOn;
 var timeLeft;
 
 window.onload = function() {
@@ -43,7 +42,6 @@ var game = {
                 randomWord = data[0].split('');
                 console.log(randomWord);
                 hiddenWord = [];
-                gameOn = true;
                 for (i = 0; i < randomWord.length; i++) {
                     hiddenWord.push("_");
                 }
