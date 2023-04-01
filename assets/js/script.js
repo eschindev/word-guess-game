@@ -8,7 +8,7 @@ var resetButton;
 var wins;
 var losses;
 var gameOn;
-var timeLeft = 10;
+var timeLeft;
 
 window.onload = function() {
     gameArea = document.getElementById("game-area");
@@ -17,8 +17,10 @@ window.onload = function() {
     winsDisplay = document.getElementById("wins-display");
     lossesDisplay = document.getElementById("losses-display");
     resetButton = document.getElementById("reset-button");
+    restartButton = document.getElementById("restart-button");
     document.addEventListener("keydown", game.checkGuess);
     resetButton.addEventListener("click", game.resetResults);
+    restartButton.addEventListener("click", game.restartGame);
     wins = 0;
     losses = 0;
     if (localStorage.wins) {
@@ -36,6 +38,7 @@ var game = {
         fetch('https://random-word-api.herokuapp.com/word')
             .then(response => response.json())
             .then(data => {
+                timeLeft = 10;
                 countdown();
                 randomWord = data[0].split('');
                 console.log(randomWord);
@@ -78,6 +81,9 @@ var game = {
         localStorage.clear();
         winsDisplay.textContent = "0";
         lossesDisplay.textContent = "0";
+    },
+    restartGame: function(){
+        game.startGame()
     }
 }
 
