@@ -4,8 +4,8 @@ var randomWord;
 var hiddenWord;
 var hiddenWordStr;
 var wordDisplay;
-var wins = 0;
-var losses = 0;
+var wins;
+var losses;
 var gameOn;
 var timeLeft = 10;
 
@@ -13,12 +13,18 @@ window.onload = function() {
     gameArea = document.getElementById("game-area");
     timer = document.getElementById("timer");
     wordDisplay = document.getElementById("word-display");
-    if (localStorage.wins !== null) {
+    winsDisplay = document.getElementById("wins-display");
+    lossesDisplay = document.getElementById("losses-display");
+    wins = 0;
+    losses = 0;
+    if (localStorage.wins) {
         wins = localStorage.wins;
     }
-    if (localStorage.losses !== null) {
+    winsDisplay.textContent = wins;
+    if (localStorage.losses) {
         losses = localStorage.losses;
     }
+    lossesDisplay.textContent = losses;
 }
 
 var game = {
@@ -35,13 +41,18 @@ var game = {
                     hiddenWord.push("_");
                 }
                 game.refreshWord();
-                
-                
-
             });
     },
-    endGame: function() {
-        gameOn = false;
+    winGame: function() {
+        wins++;
+        timeLeft = -1;
+        winsDisplay.textContent = wins;
+        localStorage.setItem("wins", wins);
+    },
+    loseGame: function() {
+        losses++;
+        lossesDisplay.textContent = losses;
+        localStorage.setItem("losses", losses);
     },
     checkGuess: function(event) {
         for (i = 0; i < randomWord.length; i++) {
@@ -54,19 +65,23 @@ var game = {
     refreshWord: function() {
         hiddenWordStr = hiddenWord.join(" ");
         wordDisplay.textContent = hiddenWordStr;
+        if (!hiddenWord.includes("_")) {
+            game.winGame();
+        }
     }
 }
-
-
 
 function countdown() {
     var timeInterval = setInterval(function () {
       if (timeLeft >= 1) {
         timer.textContent = timeLeft;
         timeLeft--;
+      } else if (timeLeft === -1) {
+        timer.textContent = ":^)";
+        clearInterval(timeInterval);
       } else {
-        timer.textContent = '';
-        game.endGame();
+        game.loseGame();
+        timer.textContent = ":^(";
         clearInterval(timeInterval);
       }
     }, 1000);
