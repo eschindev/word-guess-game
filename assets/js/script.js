@@ -4,6 +4,7 @@ var randomWord;
 var hiddenWord;
 var hiddenWordStr;
 var wordDisplay;
+var resetButton;
 var wins;
 var losses;
 var gameOn;
@@ -15,6 +16,9 @@ window.onload = function() {
     wordDisplay = document.getElementById("word-display");
     winsDisplay = document.getElementById("wins-display");
     lossesDisplay = document.getElementById("losses-display");
+    resetButton = document.getElementById("reset-button");
+    document.addEventListener("keydown", game.checkGuess);
+    resetButton.addEventListener("click", game.resetResults);
     wins = 0;
     losses = 0;
     if (localStorage.wins) {
@@ -50,6 +54,7 @@ var game = {
         localStorage.setItem("wins", wins);
     },
     loseGame: function() {
+        wordDisplay.textContent = randomWord.join(' ');
         losses++;
         lossesDisplay.textContent = losses;
         localStorage.setItem("losses", losses);
@@ -68,6 +73,11 @@ var game = {
         if (!hiddenWord.includes("_")) {
             game.winGame();
         }
+    },
+    resetResults: function() {
+        localStorage.clear();
+        winsDisplay.textContent = "0";
+        lossesDisplay.textContent = "0";
     }
 }
 
@@ -87,5 +97,4 @@ function countdown() {
     }, 1000);
 }
 
-document.addEventListener("keydown", game.checkGuess);
-game.startGame()
+game.startGame();
