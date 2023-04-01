@@ -1,24 +1,37 @@
 var gameArea;
 var timer;
 var randomWord;
-var wins;
-var losses;
+var hiddenWord;
+var wins = 0;
+var losses = 0;
 
 window.onload = function() {
     gameArea = document.getElementById("game-area");
     timer = document.getElementById("timer");
-    randomWord = "";
-    wins = 0;
-    losses = 0;
+}
+
+var game = {
+    startGame: function() {
+        fetch('https://random-word-api.herokuapp.com/word')
+            .then(response => response.json())
+            .then(data => {
+                randomWord = data[0].split('');
+                console.log(randomWord);
+                hiddenWord = [];
+                for (i = 0; i < randomWord.length; i++) {
+                    hiddenWord.push("_");
+                }
+
+
+                countdown();
+            });
+    },
+    endGame: function() {
+
+    }
 }
 
 
-
-function genRandomWord() {
-    fetch('https://random-word-api.herokuapp.com/word')
-        .then(response => response.json())
-        .then(data => {randomWord = data[0]});
-}
 
 function countdown() {
     var timeLeft = 20;
@@ -34,6 +47,4 @@ function countdown() {
     }, 1000);
 }
 
-genRandomWord();
-console.log(randomWord);
-countdown();
+game.startGame()
