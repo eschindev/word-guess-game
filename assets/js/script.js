@@ -8,6 +8,7 @@ var resetButton;
 var wins;
 var losses;
 var timeLeft;
+var currentScore;
 
 window.onload = function() {
     gameArea = document.getElementById("game-area");
@@ -37,6 +38,7 @@ var game = {
         fetch('https://random-word-api.herokuapp.com/word')
             .then(response => response.json())
             .then(data => {
+                currentScore = [wins, losses];
                 timeLeft = 10;
                 countdown();
                 randomWord = data[0].split('');
@@ -49,14 +51,14 @@ var game = {
             });
     },
     winGame: function() {
-        wins++;
         timeLeft = -1;
+        wins = currentScore[0] + 1;
         winsDisplay.textContent = wins;
         localStorage.setItem("wins", wins);
     },
     loseGame: function() {
         wordDisplay.textContent = randomWord.join(' ');
-        losses++;
+        losses = currentScore[1] + 1;
         lossesDisplay.textContent = losses;
         localStorage.setItem("losses", losses);
     },
